@@ -86,10 +86,12 @@ def init_vars():
 
 		# unknown switch
 		elif sys.argv[i][0] == '-':
-			print(' ')
-			print('ERROR: switch ' + sys.argv[i].upper() + ' not found')
-			print('	Try ''./xls2xlsx.py -help'' for more options')
-			print(' ')
+			print ' '
+			print 'ERROR: switch ' + sys.argv[i].upper() + ' not found'
+			#print('	Try ''./xls2xlsx.py -help''
+			#for more options')
+			print '         Try ./' , __file__ , '-help for more options'
+			print ' '
 			exit()
 
 	# Check to see if the minimum number of arguments (2) has been
