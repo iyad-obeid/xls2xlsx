@@ -68,44 +68,49 @@ def open_xls_as_xlsx(filename):
 
 def init_vars():
 
-	flag = dict(verbose=False, help=False)
+	flag = dict(verbose=False, help=False, sameOutFile=False)
 
-	nArguments = len(sys.argv)-1
+	input_args = sys.argv[1:]
+
 	# check all the input switches in order to set up process flow properly
-	for i in range(1, len(sys.argv)):
+	for arg in sys.argv[1:]:
 
-		if (sys.argv[i].lower() == '-verbose') or \
-			(sys.argv[i].lower() == '-v'):
+		if arg.lower() == '-verbose' or \
+			arg.lower() == '-v':
 			flag['verbose'] = True
-			nArguments -= 1
+			input_args.pop(0)
 
-		elif (sys.argv[i].lower() == '-help') or \
-			(sys.argv[i].lower() == '-h'):
+		elif arg.lower() == '-help' or \
+			arg.lower() == '-h':
 			flag['help'] = True
-			nArguments -= 1
+			input_args.pop(0)
 
 		# unknown switch
-		elif sys.argv[i][0] == '-':
+		elif arg[0] == '-':
 			print ' '
-			print 'ERROR: switch ' + sys.argv[i].upper() + ' not found'
-			#print('	Try ''./xls2xlsx.py -help''
-			#for more options')
+			print 'ERROR: switch ' + arg + ' not found'
 			print '         Try ./' , __file__ , '-help for more options'
 			print ' '
 			exit()
 
+	nArguments = len(input_args)
+
 	# Check to see if the minimum number of arguments (2) has been
 	# supplied. Note that you don't need two arguments if the help
 	# flag has been thrown
-	if (flag['help'] is False) and (nArguments != 2):
-		print(' ')
-		print('ERROR: provide input and output filenames')
-		print(' ')
-		exit()
-
-	# extract the filenames
-	fileNameInput = sys.argv[-2]
-	fileNameOutput = sys.argv[-1]
+	if flag['help'] is False:
+		if nArguments == 0:
+			print('ERROR: no filenames provided')
+			exit()
+		else:
+			fileNameInput = input_args[0]
+			if nArguments == 1:
+				fileNameOutput = fileNameInput[0:-3]+'xlsx'
+			elif nArguments == 2:
+				fileNameOutput = input_args[1]
+			else:
+				print('ERROR: too many input arguments specified')
+				exit()
 
 	# check to see if the specified input file exists
 	if os.path.isfile(fileNameInput) is False:
